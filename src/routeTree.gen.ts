@@ -10,41 +10,104 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppSimilarityRouteImport } from './routes/_app/similarity'
+import { Route as AppQuestionsIndexRouteImport } from './routes/_app/questions.index'
 import { Route as ApiProxySplatRouteImport } from './routes/api/proxy/$'
+import { Route as AppQuestionsNewRouteImport } from './routes/_app/questions.new'
+import { Route as AppQuestionsIdRouteImport } from './routes/_app/questions.$id'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSimilarityRoute = AppSimilarityRouteImport.update({
+  id: '/similarity',
+  path: '/similarity',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuestionsIndexRoute = AppQuestionsIndexRouteImport.update({
+  id: '/questions/',
+  path: '/questions/',
+  getParentRoute: () => AppRoute,
 } as any)
 const ApiProxySplatRoute = ApiProxySplatRouteImport.update({
   id: '/api/proxy/$',
   path: '/api/proxy/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppQuestionsNewRoute = AppQuestionsNewRouteImport.update({
+  id: '/questions/new',
+  path: '/questions/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuestionsIdRoute = AppQuestionsIdRouteImport.update({
+  id: '/questions/$id',
+  path: '/questions/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AppRoute
+  '/': typeof AppIndexRoute
+  '/similarity': typeof AppSimilarityRoute
+  '/questions/$id': typeof AppQuestionsIdRoute
+  '/questions/new': typeof AppQuestionsNewRoute
   '/api/proxy/$': typeof ApiProxySplatRoute
+  '/questions/': typeof AppQuestionsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AppRoute
+  '/similarity': typeof AppSimilarityRoute
+  '/': typeof AppIndexRoute
+  '/questions/$id': typeof AppQuestionsIdRoute
+  '/questions/new': typeof AppQuestionsNewRoute
   '/api/proxy/$': typeof ApiProxySplatRoute
+  '/questions': typeof AppQuestionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_app': typeof AppRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_app/similarity': typeof AppSimilarityRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/questions/$id': typeof AppQuestionsIdRoute
+  '/_app/questions/new': typeof AppQuestionsNewRoute
   '/api/proxy/$': typeof ApiProxySplatRoute
+  '/_app/questions/': typeof AppQuestionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/proxy/$'
+  fullPaths:
+    | '/'
+    | '/similarity'
+    | '/questions/$id'
+    | '/questions/new'
+    | '/api/proxy/$'
+    | '/questions/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/proxy/$'
-  id: '__root__' | '/_app' | '/api/proxy/$'
+  to:
+    | '/similarity'
+    | '/'
+    | '/questions/$id'
+    | '/questions/new'
+    | '/api/proxy/$'
+    | '/questions'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/similarity'
+    | '/_app/'
+    | '/_app/questions/$id'
+    | '/_app/questions/new'
+    | '/api/proxy/$'
+    | '/_app/questions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AppRoute: typeof AppRoute
+  AppRoute: typeof AppRouteWithChildren
   ApiProxySplatRoute: typeof ApiProxySplatRoute
 }
 
@@ -57,6 +120,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/similarity': {
+      id: '/_app/similarity'
+      path: '/similarity'
+      fullPath: '/similarity'
+      preLoaderRoute: typeof AppSimilarityRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/questions/': {
+      id: '/_app/questions/'
+      path: '/questions'
+      fullPath: '/questions/'
+      preLoaderRoute: typeof AppQuestionsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/api/proxy/$': {
       id: '/api/proxy/$'
       path: '/api/proxy/$'
@@ -64,11 +148,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiProxySplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/questions/new': {
+      id: '/_app/questions/new'
+      path: '/questions/new'
+      fullPath: '/questions/new'
+      preLoaderRoute: typeof AppQuestionsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/questions/$id': {
+      id: '/_app/questions/$id'
+      path: '/questions/$id'
+      fullPath: '/questions/$id'
+      preLoaderRoute: typeof AppQuestionsIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppSimilarityRoute: typeof AppSimilarityRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppQuestionsIdRoute: typeof AppQuestionsIdRoute
+  AppQuestionsNewRoute: typeof AppQuestionsNewRoute
+  AppQuestionsIndexRoute: typeof AppQuestionsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppSimilarityRoute: AppSimilarityRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppQuestionsIdRoute: AppQuestionsIdRoute,
+  AppQuestionsNewRoute: AppQuestionsNewRoute,
+  AppQuestionsIndexRoute: AppQuestionsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  AppRoute: AppRoute,
+  AppRoute: AppRouteWithChildren,
   ApiProxySplatRoute: ApiProxySplatRoute,
 }
 export const routeTree = rootRouteImport
