@@ -63,9 +63,11 @@ function QuestionsListPage() {
     );
   }, [data, search.q]);
 
+  type SearchParams = z.infer<typeof searchSchema>;
+
   const onCategoryChange = (value: string) => {
     navigate({
-      search: (prev) => ({
+      search: (prev: SearchParams) => ({
         ...prev,
         category: value === "ALL" ? undefined : (value as QuestionCategory),
       }),
@@ -75,7 +77,10 @@ function QuestionsListPage() {
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
     navigate({
-      search: (prev) => ({ ...prev, q: searchInput.trim() || undefined }),
+      search: (prev: SearchParams) => ({
+        ...prev,
+        q: searchInput.trim() || undefined,
+      }),
     });
   };
 
