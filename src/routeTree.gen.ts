@@ -9,61 +9,184 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppSimilarityRouteImport } from './routes/_app/similarity'
+import { Route as AppQuestionsIndexRouteImport } from './routes/_app/questions.index'
+import { Route as ApiProxySplatRouteImport } from './routes/api/proxy/$'
+import { Route as AppQuestionsNewRouteImport } from './routes/_app/questions.new'
+import { Route as AppQuestionsIdRouteImport } from './routes/_app/questions.$id'
 
-const IndexRoute = IndexRouteImport.update({
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSimilarityRoute = AppSimilarityRouteImport.update({
+  id: '/similarity',
+  path: '/similarity',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuestionsIndexRoute = AppQuestionsIndexRouteImport.update({
+  id: '/questions/',
+  path: '/questions/',
+  getParentRoute: () => AppRoute,
+} as any)
+const ApiProxySplatRoute = ApiProxySplatRouteImport.update({
+  id: '/api/proxy/$',
+  path: '/api/proxy/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppQuestionsNewRoute = AppQuestionsNewRouteImport.update({
+  id: '/questions/new',
+  path: '/questions/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuestionsIdRoute = AppQuestionsIdRouteImport.update({
+  id: '/questions/$id',
+  path: '/questions/$id',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
+  '/similarity': typeof AppSimilarityRoute
+  '/questions/$id': typeof AppQuestionsIdRoute
+  '/questions/new': typeof AppQuestionsNewRoute
+  '/api/proxy/$': typeof ApiProxySplatRoute
+  '/questions/': typeof AppQuestionsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/similarity': typeof AppSimilarityRoute
+  '/': typeof AppIndexRoute
+  '/questions/$id': typeof AppQuestionsIdRoute
+  '/questions/new': typeof AppQuestionsNewRoute
+  '/api/proxy/$': typeof ApiProxySplatRoute
+  '/questions': typeof AppQuestionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_app/similarity': typeof AppSimilarityRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/questions/$id': typeof AppQuestionsIdRoute
+  '/_app/questions/new': typeof AppQuestionsNewRoute
+  '/api/proxy/$': typeof ApiProxySplatRoute
+  '/_app/questions/': typeof AppQuestionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/similarity'
+    | '/questions/$id'
+    | '/questions/new'
+    | '/api/proxy/$'
+    | '/questions/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/similarity'
+    | '/'
+    | '/questions/$id'
+    | '/questions/new'
+    | '/api/proxy/$'
+    | '/questions'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/similarity'
+    | '/_app/'
+    | '/_app/questions/$id'
+    | '/_app/questions/new'
+    | '/api/proxy/$'
+    | '/_app/questions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  ApiProxySplatRoute: typeof ApiProxySplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/similarity': {
+      id: '/_app/similarity'
+      path: '/similarity'
+      fullPath: '/similarity'
+      preLoaderRoute: typeof AppSimilarityRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/questions/': {
+      id: '/_app/questions/'
+      path: '/questions'
+      fullPath: '/questions/'
+      preLoaderRoute: typeof AppQuestionsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/api/proxy/$': {
+      id: '/api/proxy/$'
+      path: '/api/proxy/$'
+      fullPath: '/api/proxy/$'
+      preLoaderRoute: typeof ApiProxySplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/questions/new': {
+      id: '/_app/questions/new'
+      path: '/questions/new'
+      fullPath: '/questions/new'
+      preLoaderRoute: typeof AppQuestionsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/questions/$id': {
+      id: '/_app/questions/$id'
+      path: '/questions/$id'
+      fullPath: '/questions/$id'
+      preLoaderRoute: typeof AppQuestionsIdRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppSimilarityRoute: typeof AppSimilarityRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppQuestionsIdRoute: typeof AppQuestionsIdRoute
+  AppQuestionsNewRoute: typeof AppQuestionsNewRoute
+  AppQuestionsIndexRoute: typeof AppQuestionsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppSimilarityRoute: AppSimilarityRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppQuestionsIdRoute: AppQuestionsIdRoute,
+  AppQuestionsNewRoute: AppQuestionsNewRoute,
+  AppQuestionsIndexRoute: AppQuestionsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  ApiProxySplatRoute: ApiProxySplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
