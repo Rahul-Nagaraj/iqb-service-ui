@@ -18,7 +18,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryBadge } from "@/components/common/CategoryBadge";
 import { useQuestionsList } from "@/features/questions/hooks/useQuestions";
-import { CATEGORY_LABELS, QUESTION_CATEGORIES } from "@/constants/categories";
+import { CATEGORY_LABELS } from "@/constants/categories";
+import { QUESTION_CATEGORIES } from "@/types/question";
 
 export const Route = createFileRoute("/_app/")({
   head: () => ({

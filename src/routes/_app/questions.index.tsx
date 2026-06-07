@@ -25,7 +25,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CATEGORY_LABELS, QUESTION_CATEGORIES } from "@/constants/categories";
+import { CATEGORY_LABELS } from "@/constants/categories";
+import { QUESTION_CATEGORIES } from "@/types/question";
 import { useQuestionsList } from "@/features/questions/hooks/useQuestions";
 import type { QuestionCategory } from "@/types/question";
 
