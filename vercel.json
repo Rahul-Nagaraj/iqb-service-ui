@@ -2,9 +2,15 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "bun run build",
   "installCommand": "bun install",
-  "build": {
-    "env": {
-      "NITRO_PRESET": "vercel"
+  "outputDirectory": "dist/client",
+  "rewrites": [
+    {
+      "source": "/api/proxy/:path*",
+      "destination": "https://iqbapp-1.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  }
+  ]
 }
